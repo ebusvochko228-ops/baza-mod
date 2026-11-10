@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -30,7 +31,6 @@ public class BazaModClient implements ClientModInitializer {
             return;
         }
 
-        // Горячая клавиша включения/выключения
         boolean keyDown = client.currentScreen == null
                 && InputUtil.isKeyPressed(client.getWindow().getHandle(), bindKey);
         if (keyDown && !keyWasDown) {
@@ -54,7 +54,6 @@ public class BazaModClient implements ClientModInitializer {
         BlockPos head = feet.up();
         BlockPos top = head.up();
 
-        // Проверка лавы: смотрим на 2 блока вперёд, от 2 ниже до 2 выше игрока
         for (int d = 2; d <= 3; d++) {
             BlockPos column = playerPos.offset(dir, d);
             for (int dy = -2; dy <= 2; dy++) {
@@ -65,7 +64,6 @@ public class BazaModClient implements ClientModInitializer {
             }
         }
 
-        // Копаем проход: уровень ног, головы и над головой (чтобы можно было подняться по склону)
         BlockPos[] targets = {feet, head, top};
         for (BlockPos pos : targets) {
             BlockState state = world.getBlockState(pos);
@@ -77,7 +75,6 @@ public class BazaModClient implements ClientModInitializer {
                 return;
             }
 
-            // Если блок не ломается дольше 2 секунд — сервер его защищает
             if (!pos.equals(breakTarget)) {
                 breakTarget = pos;
                 breakStartMs = System.currentTimeMillis();
@@ -89,9 +86,9 @@ public class BazaModClient implements ClientModInitializer {
                 return;
             }
             if (done) breakTarget = null;
-            return; // один блок за тик
+            return;
         }
-        breakTarget = null; // проход чист, идём дальше
+        breakTarget = null;
     }
 
     private void stop(MinecraftClient client, String reason) {
@@ -107,7 +104,6 @@ public class BazaModClient implements ClientModInitializer {
         client.inGameHud.getChatHud().addMessage(Text.literal("[BazaMod] " + text));
     }
 
-    // Обработка команды .baza
     public static void handleCommand(String message) {
         MinecraftClient client = MinecraftClient.getInstance();
         String[] parts = message.trim().split("\\s+");
@@ -119,9 +115,9 @@ public class BazaModClient implements ClientModInitializer {
             int code = parseKey(parts[2].toUpperCase());
             if (code != -1) {
                 bindKey = code;
-                msg(client, "Клавиша открытия меню: " + parts[2].toUpperCase());
+                msg(client, "Клавиша: " + parts[2].toUpperCase());
             } else {
-                msg(client, "Не понял клавишу. Пример: .baza key G (только буквы и цифры)");
+                msg(client, "Не понял клавишу. Пример: .baza key G");
             }
         } else if (parts[1].equalsIgnoreCase("menu")) {
             client.setScreen(new BazaScreen());
