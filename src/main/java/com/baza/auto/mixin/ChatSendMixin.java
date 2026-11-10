@@ -1,5 +1,6 @@
 package com.baza.auto.mixin;
 
+import com.baza.auto.BazaModClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
