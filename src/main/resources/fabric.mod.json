@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
   "id": "baza_mod",
-  "version": "${version}",
-  "name": "Baza Auto Miner",
-  "description": "Автокопание тоннеля перед собой, защита от лавы, команда .baza и меню",
-  "authors": ["You"],
-  "license": "MIT",
+  "version": "1.0.0",
+  "name": "BazaMod",
+  "description": "Tunnel digging mod",
   "environment": "client",
   "entrypoints": {
-    "client": ["com.baza.auto.BazaModClient"]
+    "client": [
+      "com.baza.auto.BazaModClient"
+    ]
   },
-  "mixins": ["baza_mod.mixins.json"],
+  "mixins": [
+    "baza_mod.mixins.json"
+  ],
   "depends": {
-    "fabricloader": ">=0.16.0",
-    "minecraft": "~1.21.4",
-    "java": ">=21",
-    "fabric-api": "*"
+    "fabricloader": ">=0.15.0",
+    "java": ">=21"
   }
 }
